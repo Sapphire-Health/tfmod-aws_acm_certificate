@@ -36,4 +36,8 @@ resource "aws_acm_certificate" "acm_certificate" {
     },
     each.value.tags
   )
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
