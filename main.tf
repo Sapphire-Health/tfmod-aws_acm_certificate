@@ -12,7 +12,7 @@ resource "tls_self_signed_cert" "cert" {
   private_key_pem = tls_private_key.priv[each.key].private_key_pem
 
   subject {
-    common_name = "${each.key}.sapphirehealth.org"
+    common_name  = "${each.key}.sapphirehealth.org"
     organization = "Sapphire Health"
   }
 
@@ -29,10 +29,10 @@ resource "aws_acm_certificate" "acm_certificate" {
   for_each = {
     for cert in local.certificates : "${cert.key}" => cert
   }
-  private_key = each.value.private_key != null ? each.value.private_key : tls_private_key.priv[each.key].private_key_pem
+  private_key      = each.value.private_key != null ? each.value.private_key : tls_private_key.priv[each.key].private_key_pem
   certificate_body = each.value.certificate_body != null ? each.value.certificate_body : tls_self_signed_cert.cert[each.key].cert_pem
   tags = merge({
-      Name = each.value.name
+    Name = each.value.name
     },
     each.value.tags
   )
